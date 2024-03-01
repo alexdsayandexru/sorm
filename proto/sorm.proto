@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sorm;
+
+option go_package = "github.com/alexdsayandexru/sorm/gen;sorm";
+
+message SendRequest {
+  string data = 1;
+}
+
+message SendResponse {
+  string reserved = 1;
+}
+
+service DataCollectionService {
+  rpc Send (SendRequest) returns (SendResponse);
+}

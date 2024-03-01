@@ -1,1 +1,1 @@
-Hello world
+make generate-sorm-structs
