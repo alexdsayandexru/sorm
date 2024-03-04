@@ -14,6 +14,7 @@ type DataCollectionServiceImpl struct {
 
 func (DataCollectionServiceImpl) Send(ctx context.Context, r *sorm.SendRequest) (*sorm.SendResponse, error) {
 	fmt.Println("Send to Kafka:", r.Data)
+
 	response := &sorm.SendResponse{Reserved: r.Data}
 	return response, nil
 }
