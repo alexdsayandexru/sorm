@@ -1,17 +1,273 @@
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
+
 package sorm;
 
 option go_package = "github.com/alexdsayandexru/sorm/gen;sorm";
 
-message SendRequest {
-  string data = 1;
+service UserDataManagement {
+  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse);
+  rpc LoginUser (LoginUserRequest) returns (LoginUserResponse);
+  rpc LogoutUser (LogoutUserRequest) returns (LogoutUserResponse);
+  rpc DeleteUserAccount (DeleteUserAccountRequest) returns (DeleteUserAccountResponse);
+  rpc UpdateUserData (UpdateUserDataRequest) returns (UpdateUserDataResponse);
+  rpc DeleteUserAccountAdmin (DeleteUserAccountAdminRequest) returns (DeleteUserAccountAdminResponse);
+  rpc UpdateUserDataAdmin (UpdateUserDataAdminRequest) returns (UpdateUserDataAdminResponse);
+  rpc DeleteAccount (DeleteAccountRequest) returns (DeleteAccountResponse);
+  rpc UserAccountRecovery (UserAccountRecoveryRequest) returns (UserAccountRecoveryResponse);
 }
 
-message SendResponse {
-  string reserved = 1;
+//**********************************************************************************************************************
+message Msisdn {
+  string msisdn = 1;
 }
 
-service DataCollectionService {
-  rpc Send (SendRequest) returns (SendResponse);
+message Email {
+  string email = 1;
+}
+
+message Add {
+  string title = 1;
+  string content = 2;
+}
+
+message Im_id {
+  string service_name = 1;
+  string service_id = 2;
+}
+
+//**********************************************************************************************************************
+message RegisterUserRequest {
+  string correlation_id = 1;     // Уникальный идентификатор события
+  int32 telco_id = 2;            // Идентификатор Газпром ИД
+  int32 user_type = 3;           // Тип пользователя
+  string user_id = 4;            // Уникальный идентификатор пользователя
+  int32 service_id = 5;          // Идентификатор сервиса
+  string ip = 6;                 // IP-адрес пользователя
+  int32 port = 7;                // Порт
+  string user_agent = 8;         // Прочая техническая информация User_agent
+  string datetime = 9;           // Дата и время наступления события
+  repeated Msisdn msisdns = 10;  // Список номеров телефона
+  string datetime_reg = 11;      // Дата и время регистрации пользователя
+  repeated Email emails = 12;    // Список email
+  int32 service_user = 13;       // Идентификатор Газпром ID
+  repeated Add additional = 14;  // Список дополнительных данных о пользователе
+  string contract_date = 15;     // Дата и время согласия с пользовательским соглашением
+  string msisdn_login = 16;      // Номер телефона, по которому пользователь аутентифицирован
+  string email_login = 17;       // Email, по которому пользователь аутентифицирован
+  string  message = 18;          // текст сообщения без разметки и иной служебной коммуникационной информации;
+}
+
+message RegisterUserResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке
+}
+
+//**********************************************************************************************************************
+message LoginUserRequest {
+  string correlation_id = 1;     // Уникальный идентификатор события
+  int32 telco_id = 2;            // Идентификатор Газпром ИД
+  int32 user_type = 3;           // Тип пользователя
+  string user_id = 4;            // Уникальный идентификатор пользователя
+  int32 service_id = 5;          // Идентификатор сервиса
+  string ip = 6;                 // IP-адрес пользователя
+  int32 port = 7;                // Порт
+  string user_agent = 8;         // Прочая техническая информация User_agent
+  string factor = 9;             // Тип входа
+  string datetime = 10;          // Дата и время наступления события
+  string  msisdn_login = 11;     // номер телефона
+  string  email_login = 12;      // email
+}
+
+message LoginUserResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+}
+
+//**********************************************************************************************************************
+message LogoutUserRequest {
+  string correlation_id = 1;     // Уникальный идентификатор события
+  int32 telco_id = 2;            // Идентификатор Газпром ИД
+  int32 user_type = 3;            // Тип пользователя
+  string user_id = 4;            // Уникальный идентификатор пользователя
+  int32 service_id = 5;          // Идентификатор сервиса
+  string ip = 6;                 // IP-адрес пользователя
+  int32 port = 7;                // Порт
+  string user_agent = 8;         // Прочая техническая информация User_agent
+  string datetime = 9;           // Дата и время наступления события
+}
+
+message LogoutUserResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+}
+
+//**********************************************************************************************************************
+message DeleteUserAccountRequest {
+string correlation_id = 1;     // Уникальный идентификатор события
+    int32 telco_id = 2;            // Идентификатор Газпром ИД
+    int32 user_type = 3;            // Тип пользователя
+    string user_id = 4;            // Уникальный идентификатор пользователя
+    int32 service_id = 5;          // Идентификатор сервиса
+    string ip = 6;                 // IP-адрес пользователя
+    int32 port = 7;                // Порт
+    string user_agent = 8;         // Прочая техническая информация User_agent
+    string datetime = 9;           // Дата и время наступления события
+    string message = 10;         // текст сообщения без разметки и иной служебной коммуникационной информации
+    }
+
+message DeleteUserAccountResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+}
+
+//**********************************************************************************************************************
+message UpdateUserDataRequest {
+  string correlation_id = 1;     // Уникальный идентификатор события
+  int32 telco_id = 2;            // Идентификатор Газпром ИД
+  int32 user_type = 3;            // Тип пользователя
+  string user_id = 4;            // Уникальный идентификатор пользователя
+  int32 service_id = 5;          // Идентификатор сервиса
+  string ip = 6;                 // IP-адрес пользователя
+  int32 port = 7;                // Порт
+  string user_agent = 8;         // Прочая техническая информация User_agent
+  string datetime = 9;           // Дата и время наступления события
+  repeated Msisdn msisdns = 10;  // Список номеров телефона
+  string datetime_reg = 11;      // Дата и время регистрации пользователя
+  string datetime_updated = 12;  // Дата и время обновления данных пользователя
+  repeated Email emails = 13;    // Список email
+  int32 service_user = 14;       // Идентификатор Газпром ID
+  repeated Add additional = 15;  // Список дополнительных данных о пользователе
+  string contract_date = 16;     // Дата и время согласия с пользовательским соглашением
+  string nick = 17;              // Никнейм пользователя
+  string birth_date = 18;        // Дата рождения пользователя
+  string name = 19;              // Имя пользователя
+  string family = 20;            // Фамилия пользователя
+  string initial = 21;           // Отчество пользователя
+  string address = 22;           // Город
+  repeated Im_id im_ids = 23;    // Список УЗ пользователя во внешних сервисах
+  string message = 24;           // текст сообщения без разметки и иной служебной коммуникационной информации
+  }
+
+  message UpdateUserDataResponse {
+    int32 code = 1;                           // gRPC код ошибки
+    string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+    repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+  }
+
+//**********************************************************************************************************************
+message DeleteUserAccountAdminRequest {
+  string correlation_id = 1;    // Уникальный идентификатор события
+  int32 telco_id = 2;           // Идентификатор Газпром ИД
+  int32 user_type = 3;          // Тип пользователя
+  string user_id = 4;           // Уникальный идентификатор пользователя
+  int32 service_id = 5;         // Идентификатор сервиса
+  string datetime = 6;          // Дата и время наступления события
+  repeated Msisdn msisdns = 7;  // Список номеров телефона
+  string datetime_reg = 8;      // Дата и время регистрации пользователя
+  repeated Email emails = 9;     // Список email
+  string datetime_updated = 10;  // Дата и время обновления данных пользователя
+  int32 service_user = 11;       // Идентификатор Газпром ID
+  repeated Add additional = 12;  // Список дополнительных данных о пользователе
+  string contract_date = 13;     // Дата и время согласия с пользовательским соглашением
+  string nick = 14;              // Никнейм пользователя
+  string birth_date = 15;        // Дата рождения пользователя
+  string name = 16;              // Имя пользователя
+  string family = 17;            // Фамилия пользователя
+  string initial = 18;           // Отчество пользователя
+  string address = 19;           // Город
+  repeated Im_id im_ids = 20;    // Список УЗ пользователя во внешних сервисах
+  string datetime_unreg = 21;    // Дата и удаления пользователя
+}
+
+message DeleteUserAccountAdminResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+}
+
+//**********************************************************************************************************************
+message UpdateUserDataAdminRequest {
+  string correlation_id = 1;      // Уникальный идентификатор события
+  int32 telco_id = 2;             // Идентификатор Газпром ИД
+  int32 user_type = 3;            // Тип пользователя
+  string user_id = 4;             // Уникальный идентификатор пользователя
+  int32 service_id = 5;           // Идентификатор сервиса
+  string datetime = 6;            // Дата и время наступления события
+  repeated Msisdn msisdns = 7;    // Список номеров телефона
+  string datetime_reg = 8;        // Дата и время регистрации пользователя
+  repeated Email emails = 9;     // Список email
+  string datetime_updated = 10;  // Дата и время обновления данных пользователя
+  int32 service_user = 11;       //  Идентификатор Газпром ID
+  repeated Add additional = 12;  // Список дополнительных данных о пользователе
+  string contract_date = 13;     // Дата и время согласия с пользовательским соглашением
+  string nick = 14;              // Никнейм пользователя
+  string birth_date = 15;        // Дата рождения пользователя
+  string name = 16;              // Имя пользователя
+  string family = 17;            // Фамилия пользователя
+  string initial = 18;           // Отчество пользователя
+  string address = 19;           // Город
+  repeated Im_id im_ids = 20;    // Список УЗ пользователя во внешних сервисах
+  string message = 21;           // текст сообщения без разметки и иной служебной коммуникационной информации
+  }
+
+  message UpdateUserDataAdminResponse {
+    int32 code = 1;                           // gRPC код ошибки
+    string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+    repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+  }
+
+//**********************************************************************************************************************
+message DeleteAccountRequest {
+  string correlation_id = 1;      // Уникальный идентификатор события
+  int32 telco_id = 2;             // Идентификатор Газпром ИД
+  int32 user_type = 3;            // Тип пользователя
+  string user_id = 4;             // Уникальный идентификатор пользователя
+  repeated Msisdn msisdns = 5;    // Список номеров телефона
+  string datetime_reg = 6;        // Дата и время регистрации пользователя
+  string datetime_updated = 7;    // Дата и время обновления данных пользователя
+  repeated Email emails = 8;      // Список email
+  int32 service_user = 9;         // Идентификатор Газпром ID
+  repeated Add additional = 10;  // Список дополнительных данных о пользователе
+  string contract_date = 11;     // Дата и время согласия с пользовательским соглашением
+  string nick = 12;              // Никнейм пользователя
+  string birth_date = 13;        // Дата рождения пользователя
+  string name = 14;              // Имя пользователя
+  string family = 15;            // Фамилия пользователя
+  string initial = 16;           // Отчество пользователя
+  string address = 17;           // Город
+  repeated Im_id im_ids = 18;    // Список УЗ пользователя во внешних сервисах
+  string datetime_unreg = 19;    // Дата время и удаления пользователя
+}
+
+message DeleteAccountResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+}
+
+//**********************************************************************************************************************
+message UserAccountRecoveryRequest {
+string correlation_id = 1;     // Уникальный идентификатор события
+    int32 telco_id = 2;            // Идентификатор Газпром ИД
+    int32 user_type = 3;            // Тип пользователя
+    string user_id = 4;            // Уникальный идентификатор пользователя
+    int32 service_id = 5;          // Идентификатор сервиса
+    string ip = 6;                 // IP-адрес пользователя
+    int32 port = 7;                // Порт
+    string user_agent = 8;         // Прочая техническая информация User_agent
+    string datetime = 9;           // Дата и время наступления события
+    string msisdn_login = 10;          //  номер телефона
+    string email_login = 11;           // email
+    }
+
+message UserAccountRecoveryResponse {
+  int32 code = 1;                           // gRPC код ошибки
+  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
 }
