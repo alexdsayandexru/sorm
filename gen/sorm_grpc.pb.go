@@ -31,6 +31,7 @@ type UserDataManagementClient interface {
 	UpdateUserDataAdmin(ctx context.Context, in *UpdateUserDataAdminRequest, opts ...grpc.CallOption) (*UpdateUserDataAdminResponse, error)
 	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
 	UserAccountRecovery(ctx context.Context, in *UserAccountRecoveryRequest, opts ...grpc.CallOption) (*UserAccountRecoveryResponse, error)
+	DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DirectoryDataResponse, error)
 }
 
 type userDataManagementClient struct {
@@ -122,6 +123,15 @@ func (c *userDataManagementClient) UserAccountRecovery(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *userDataManagementClient) DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DirectoryDataResponse, error) {
+	out := new(DirectoryDataResponse)
+	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/DirectoryData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserDataManagementServer is the server API for UserDataManagement service.
 // All implementations must embed UnimplementedUserDataManagementServer
 // for forward compatibility
@@ -135,6 +145,7 @@ type UserDataManagementServer interface {
 	UpdateUserDataAdmin(context.Context, *UpdateUserDataAdminRequest) (*UpdateUserDataAdminResponse, error)
 	DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error)
 	UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*UserAccountRecoveryResponse, error)
+	DirectoryData(context.Context, *DirectoryDataRequest) (*DirectoryDataResponse, error)
 	mustEmbedUnimplementedUserDataManagementServer()
 }
 
@@ -168,6 +179,9 @@ func (UnimplementedUserDataManagementServer) DeleteAccount(context.Context, *Del
 }
 func (UnimplementedUserDataManagementServer) UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*UserAccountRecoveryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserAccountRecovery not implemented")
+}
+func (UnimplementedUserDataManagementServer) DirectoryData(context.Context, *DirectoryDataRequest) (*DirectoryDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DirectoryData not implemented")
 }
 func (UnimplementedUserDataManagementServer) mustEmbedUnimplementedUserDataManagementServer() {}
 
@@ -344,6 +358,24 @@ func _UserDataManagement_UserAccountRecovery_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserDataManagement_DirectoryData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DirectoryDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserDataManagementServer).DirectoryData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sorm.UserDataManagement/DirectoryData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserDataManagementServer).DirectoryData(ctx, req.(*DirectoryDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserDataManagement_ServiceDesc is the grpc.ServiceDesc for UserDataManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -386,6 +418,10 @@ var UserDataManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserAccountRecovery",
 			Handler:    _UserDataManagement_UserAccountRecovery_Handler,
+		},
+		{
+			MethodName: "DirectoryData",
+			Handler:    _UserDataManagement_DirectoryData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -16,9 +16,9 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := sorm.NewDataCollectionServiceClient(conn)
+	client := sorm.NewUserDataManagementClient(conn)
 
-	response, err := client.Send(context.Background(), &sorm.SendRequest{Data: "{\"Data\":\"hello world\"}"})
+	response, err := client.RegisterUser(context.Background(), &sorm.RegisterUserRequest{})
 	if err != nil {
 		fmt.Println(err)
 		return
