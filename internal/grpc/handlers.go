@@ -4,15 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/alexdsayandexru/sorm/gen"
-	"github.com/alexdsayandexru/sorm/internal/sorm/validation"
+	"github.com/alexdsayandexru/sorm/internal/sorm/event_handlers"
+	"github.com/alexdsayandexru/sorm/internal/sorm/factory"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 	"net"
 )
-
-const InvalidArgument = "INVALID_ARGUMENT"
 
 type UserDataManagementServerImpl struct {
 	port int
@@ -35,15 +34,15 @@ func (s *UserDataManagementServerImpl) Run() error {
 }
 
 func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
-	rules := validation.GetRegisterUserRequestValidationRules(request)
-	ok, errorInfo := validation.ValidateRules(rules)
+	target := factory.CreateRegisterUser(request)
 
+	ok, result := event_handlers.NewRegisterUserEventHandler(ctx, target).Handle()
 	if !ok {
-		return &sorm.RegisterUserResponse{Code: 3, Message: InvalidArgument, Details: []*anypb.Any{{Value: errorInfo.ToBytes()}}},
-			status.Errorf(codes.InvalidArgument, InvalidArgument, errorInfo.ToJson())
+		return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
 	}
 
-	return &sorm.RegisterUserResponse{Code: 0, Message: "OK"}, nil
+	return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message}, nil
 }
 
 func (UserDataManagementServerImpl) LoginUser(context.Context, *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {

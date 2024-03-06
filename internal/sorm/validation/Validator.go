@@ -9,7 +9,7 @@ const (
 	ErrorsDescription = "Ошибка валидации данных"
 )
 
-type MapValidationRules map[string]func() (bool, error)
+type ValidationRules map[string]func() (bool, error)
 
 type FieldError struct {
 	FieldName        string `json:"field_name"`
@@ -31,7 +31,7 @@ func (e *ErrorInfo) ToJson() string {
 	return string(e.ToBytes())
 }
 
-func ValidateRules(rules MapValidationRules) (bool, ErrorInfo) {
+func ValidateRules(rules ValidationRules) (bool, ErrorInfo) {
 	errorInfo := ErrorInfo{
 		ErrorsCode:        ErrorsCode,
 		ErrorsDescription: ErrorsDescription,

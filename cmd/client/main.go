@@ -28,6 +28,7 @@ func RegisterUser(client sorm.UserDataManagementClient) {
 			UserAgent:     "qwerty QWERTY-",
 			Message:       "qwertyuiop1234567890",
 			Datetime:      "05-03-2024:23.23.23.003",
+			Additional:    []*sorm.Add{{Title: "", Content: ""}},
 		})
 	if err != nil {
 		fmt.Println(err.Error())
@@ -39,10 +40,15 @@ func RegisterUser(client sorm.UserDataManagementClient) {
 func main() {
 	conn, err := grpc.Dial(":9090", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+
+		}
+	}(conn)
 
 	client := sorm.NewUserDataManagementClient(conn)
 	RegisterUser(client)
