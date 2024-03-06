@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/alexdsayandexru/sorm/gen"
+	"github.com/alexdsayandexru/sorm/internal/sorm/validation"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 	"net"
 )
+
+const InvalidArgument = "INVALID_ARGUMENT"
 
 type UserDataManagementServerImpl struct {
 	port int
@@ -30,8 +34,16 @@ func (s *UserDataManagementServerImpl) Run() error {
 	return err
 }
 
-func (UserDataManagementServerImpl) RegisterUser(context.Context, *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
+func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
+	rules := validation.GetRegisterUserRequestValidationRules(request)
+	ok, errorInfo := validation.ValidateRules(rules)
+
+	if !ok {
+		return &sorm.RegisterUserResponse{Code: 3, Message: InvalidArgument, Details: []*anypb.Any{{Value: errorInfo.ToBytes()}}},
+			status.Errorf(codes.InvalidArgument, InvalidArgument, errorInfo.ToJson())
+	}
+
+	return &sorm.RegisterUserResponse{Code: 0, Message: "OK"}, nil
 }
 
 func (UserDataManagementServerImpl) LoginUser(context.Context, *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {
