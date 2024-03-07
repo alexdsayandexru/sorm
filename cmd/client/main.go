@@ -25,5 +25,8 @@ func main() {
 	//LoginUser(client)
 	//LogoutUser(client)
 	//DeleteUserAccount(client)
-	UpdateUserData(client)
+	//UpdateUserData(client)
+	//DeleteUserAccountAdmin(client)
+	//UpdateUserDataAdmin(client)
+	DeleteAccount(client)
 }

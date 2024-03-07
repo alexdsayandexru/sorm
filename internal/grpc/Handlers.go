@@ -103,16 +103,40 @@ func (UserDataManagementServerImpl) UpdateUserData(ctx context.Context, request 
 	return &sorm.UpdateUserDataResponse{Code: result.Code, Message: result.Message}, nil
 }
 
-func (UserDataManagementServerImpl) DeleteUserAccountAdmin(context.Context, *sorm.DeleteUserAccountAdminRequest) (*sorm.DeleteUserAccountAdminResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserAccountAdmin not implemented")
+func (UserDataManagementServerImpl) DeleteUserAccountAdmin(ctx context.Context, request *sorm.DeleteUserAccountAdminRequest) (*sorm.DeleteUserAccountAdminResponse, error) {
+	target := factory.NewDeleteUserAccountAdmin(request)
+	ok, result := Handle(ctx, target)
+
+	if !ok {
+		return &sorm.DeleteUserAccountAdminResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
+	}
+
+	return &sorm.DeleteUserAccountAdminResponse{Code: result.Code, Message: result.Message}, nil
 }
 
-func (UserDataManagementServerImpl) UpdateUserDataAdmin(context.Context, *sorm.UpdateUserDataAdminRequest) (*sorm.UpdateUserDataAdminResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserDataAdmin not implemented")
+func (UserDataManagementServerImpl) UpdateUserDataAdmin(ctx context.Context, request *sorm.UpdateUserDataAdminRequest) (*sorm.UpdateUserDataAdminResponse, error) {
+	target := factory.NewUpdateUserDataAdmin(request)
+	ok, result := Handle(ctx, target)
+
+	if !ok {
+		return &sorm.UpdateUserDataAdminResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
+	}
+
+	return &sorm.UpdateUserDataAdminResponse{Code: result.Code, Message: result.Message}, nil
 }
 
-func (UserDataManagementServerImpl) DeleteAccount(context.Context, *sorm.DeleteAccountRequest) (*sorm.DeleteAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
+func (UserDataManagementServerImpl) DeleteAccount(ctx context.Context, request *sorm.DeleteAccountRequest) (*sorm.DeleteAccountResponse, error) {
+	target := factory.NewDeleteAccount(request)
+	ok, result := Handle(ctx, target)
+
+	if !ok {
+		return &sorm.DeleteAccountResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
+	}
+
+	return &sorm.DeleteAccountResponse{Code: result.Code, Message: result.Message}, nil
 }
 
 func (UserDataManagementServerImpl) UserAccountRecovery(context.Context, *sorm.UserAccountRecoveryRequest) (*sorm.UserAccountRecoveryResponse, error) {

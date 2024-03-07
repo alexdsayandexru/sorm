@@ -5,28 +5,6 @@ import (
 	"github.com/alexdsayandexru/sorm/internal/sorm/models"
 )
 
-func ToUpdateUserDataAbInfoAdditionalArray(adds []*sorm.Add) []models.UpdateUserDataAbInfoAdditional {
-	var result []models.UpdateUserDataAbInfoAdditional
-	for _, m := range adds {
-		result = append(result, models.UpdateUserDataAbInfoAdditional{
-			Title:   m.Title,
-			Content: m.Content,
-		})
-	}
-	return result
-}
-
-func ToUpdateUserDataAbInfoImIdArray(adds []*sorm.ImId) []models.UpdateUserDataAbInfoImId {
-	var result []models.UpdateUserDataAbInfoImId
-	for _, m := range adds {
-		result = append(result, models.UpdateUserDataAbInfoImId{
-			ServiceId:   m.ServiceId,
-			ServiceName: m.ServiceName,
-		})
-	}
-	return result
-}
-
 func NewUpdateUserData(s *sorm.UpdateUserDataRequest) *models.UpdateUserData {
 	return &models.UpdateUserData{
 		EventType:     "user_update_data",
@@ -46,8 +24,8 @@ func NewUpdateUserData(s *sorm.UpdateUserDataRequest) *models.UpdateUserData {
 			DatetimeReg:     s.DatetimeReg,
 			DatetimeUpdated: s.DatetimeUpdated,
 			ServiceId:       s.ServiceId,
-			ImId:            ToUpdateUserDataAbInfoImIdArray(s.ImIds),
-			Additional:      ToUpdateUserDataAbInfoAdditionalArray(s.Additional),
+			ImId:            ToImIdArray(s.ImIds),
+			Additional:      ToAdditionalArray(s.Additional),
 			ContractDate:    s.ContractDate,
 		},
 		EventData: models.UpdateUserDataEventData{

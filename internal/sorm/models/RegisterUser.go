@@ -4,11 +4,6 @@ import (
 	"github.com/alexdsayandexru/sorm/internal/validator"
 )
 
-type Additional struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
 type AbInfo struct {
 	UserId       string       `json:"user_id"`
 	Msisdns      []string     `json:"msisdn"`

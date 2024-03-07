@@ -2,32 +2,22 @@ package models
 
 import "github.com/alexdsayandexru/sorm/internal/validator"
 
-type UpdateUserDataAbInfoAdditional struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
-type UpdateUserDataAbInfoImId struct {
-	ServiceName string `json:"service_name"`
-	ServiceId   string `json:"service_id"`
-}
-
 type UpdateUserDataAbInfo struct {
-	UserId          string                           `json:"user_id"`
-	Nick            string                           `json:"nick"`
-	BirthDate       string                           `json:"birth_date"`
-	Name            string                           `json:"name"`
-	Family          string                           `json:"family"`
-	Initial         string                           `json:"initial"`
-	Msisdns         []string                         `json:"msisdn"`
-	Emails          []string                         `json:"email"`
-	Address         string                           `json:"address"`
-	DatetimeReg     string                           `json:"datetime_reg"`
-	DatetimeUpdated string                           `json:"datetime_updated"`
-	ServiceId       int32                            `json:"service_id"`
-	ContractDate    string                           `json:"contract_date"`
-	ImId            []UpdateUserDataAbInfoImId       `json:"im_id"`
-	Additional      []UpdateUserDataAbInfoAdditional `json:"additional"`
+	UserId          string       `json:"user_id"`
+	Nick            string       `json:"nick"`
+	BirthDate       string       `json:"birth_date"`
+	Name            string       `json:"name"`
+	Family          string       `json:"family"`
+	Initial         string       `json:"initial"`
+	Msisdns         []string     `json:"msisdn"`
+	Emails          []string     `json:"email"`
+	Address         string       `json:"address"`
+	DatetimeReg     string       `json:"datetime_reg"`
+	DatetimeUpdated string       `json:"datetime_updated"`
+	ServiceId       int32        `json:"service_id"`
+	ContractDate    string       `json:"contract_date"`
+	ImId            []ImId       `json:"im_id"`
+	Additional      []Additional `json:"additional"`
 }
 
 type UpdateUserDataEventData struct {
@@ -136,7 +126,7 @@ func (target *UpdateUserData) GetRules() ValidationRules {
 				if !ok {
 					return false, err
 				}
-				ok, err = validator.Validate(target.AbInfo.Additional).MaxLength(255).GetResult()
+				ok, err = validator.Validate(m.Content).MaxLength(255).GetResult()
 				if !ok {
 					return false, err
 				}

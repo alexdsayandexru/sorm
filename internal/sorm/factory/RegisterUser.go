@@ -5,33 +5,6 @@ import (
 	"github.com/alexdsayandexru/sorm/internal/sorm/models"
 )
 
-func ToMsisdnArray(msisdns []*sorm.Msisdn) []string {
-	var result []string
-	for _, m := range msisdns {
-		result = append(result, m.Msisdn)
-	}
-	return result
-}
-
-func ToEmailArray(emails []*sorm.Email) []string {
-	var result []string
-	for _, m := range emails {
-		result = append(result, m.Email)
-	}
-	return result
-}
-
-func ToAdditionalArray(adds []*sorm.Add) []models.Additional {
-	var result []models.Additional
-	for _, m := range adds {
-		result = append(result, models.Additional{
-			Title:   m.Title,
-			Content: m.Content,
-		})
-	}
-	return result
-}
-
 func NewRegisterUser(s *sorm.RegisterUserRequest) *models.RegisterUser {
 	return &models.RegisterUser{
 		EventType:     "user_registration",
