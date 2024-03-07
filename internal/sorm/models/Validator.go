@@ -1,15 +1,15 @@
-package validation
+package models
 
 import (
 	"encoding/json"
 )
 
+type ValidationRules map[string]func() (bool, error)
+
 const (
 	ErrorsCode        = "field-errors"
 	ErrorsDescription = "Ошибка валидации данных"
 )
-
-type ValidationRules map[string]func() (bool, error)
 
 type FieldError struct {
 	FieldName        string `json:"field_name"`
@@ -31,13 +31,13 @@ func (e *ErrorInfo) ToJson() string {
 	return string(e.ToBytes())
 }
 
-func ValidateRules(rules ValidationRules) (bool, ErrorInfo) {
+func Validate(entity IEntity) (bool, ErrorInfo) {
 	errorInfo := ErrorInfo{
 		ErrorsCode:        ErrorsCode,
 		ErrorsDescription: ErrorsDescription,
 		FieldErrors:       []FieldError{},
 	}
-	for key, rule := range rules {
+	for key, rule := range entity.GetRules() {
 		ok, err := rule()
 		if !ok {
 			errorInfo.FieldErrors = append(errorInfo.FieldErrors, FieldError{FieldName: key, ErrorDescription: err.Error()})

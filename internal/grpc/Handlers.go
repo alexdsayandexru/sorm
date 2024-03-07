@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/alexdsayandexru/sorm/gen"
-	"github.com/alexdsayandexru/sorm/internal/sorm/event_handlers"
+	"github.com/alexdsayandexru/sorm/internal/kafka"
 	"github.com/alexdsayandexru/sorm/internal/sorm/factory"
+	"github.com/alexdsayandexru/sorm/internal/sorm/models"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -33,10 +34,19 @@ func (s *UserDataManagementServerImpl) Run() error {
 	return err
 }
 
-func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
-	target := factory.CreateRegisterUser(request)
+func Handle(ctx context.Context, target models.IEntity) (bool, EventHandlerResult) {
+	ok, result := NewEventHandler(
+		ctx,
+		target,
+		kafka.GetProducer("localhost", 9092, "idp.sorm.user-registration.0"),
+	).Handle()
+	return ok, result
+}
 
-	ok, result := event_handlers.NewRegisterUserEventHandler(ctx, target).Handle()
+func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
+	target := factory.NewRegisterUser(request)
+	ok, result := Handle(ctx, target)
+
 	if !ok {
 		return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
 			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
@@ -45,8 +55,15 @@ func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *s
 	return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message}, nil
 }
 
-func (UserDataManagementServerImpl) LoginUser(context.Context, *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+func (UserDataManagementServerImpl) LoginUser(ctx context.Context, request *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {
+	/*target := factory.NewLoginUser(request)
+	ok, result := NewEventHandler(ctx, target)
+	if !ok {
+		return &sorm.LoginUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
+	}*/
+
+	return &sorm.LoginUserResponse{Code: 0, Message: ""}, nil
 }
 
 func (UserDataManagementServerImpl) LogoutUser(context.Context, *sorm.LogoutUserRequest) (*sorm.LogoutUserResponse, error) {

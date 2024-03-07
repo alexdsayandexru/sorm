@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-func (v *Validator) Maximum(max int) *Validator {
+func (v *Validator) Maximum(max int32) *Validator {
 	if v.error != nil {
 		return v
 	}
-	target, ok := v.target.(int)
+	target, ok := v.target.(int32)
 	if ok == false {
 		return v
 	}
@@ -19,11 +19,11 @@ func (v *Validator) Maximum(max int) *Validator {
 	return v
 }
 
-func (v *Validator) Equal(value int) *Validator {
+func (v *Validator) Equal(value int32) *Validator {
 	if v.error != nil {
 		return v
 	}
-	target, ok := v.target.(int)
+	target, ok := v.target.(int32)
 	if ok == false {
 		return v
 	}

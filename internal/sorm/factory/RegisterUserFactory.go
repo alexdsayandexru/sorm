@@ -32,7 +32,7 @@ func AddArrayToStringArray(adds []*sorm.Add) []models.Additional {
 	return result
 }
 
-func CreateRegisterUser(s *sorm.RegisterUserRequest) *models.RegisterUser {
+func NewRegisterUser(s *sorm.RegisterUserRequest) *models.RegisterUser {
 	return &models.RegisterUser{
 		EventType:     "user_registration",
 		CorrelationId: s.CorrelationId,
