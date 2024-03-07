@@ -56,14 +56,15 @@ func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *s
 }
 
 func (UserDataManagementServerImpl) LoginUser(ctx context.Context, request *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {
-	/*target := factory.NewLoginUser(request)
-	ok, result := NewEventHandler(ctx, target)
+	target := factory.NewLoginUser(request)
+	ok, result := Handle(ctx, target)
+
 	if !ok {
 		return &sorm.LoginUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
 			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}*/
+	}
 
-	return &sorm.LoginUserResponse{Code: 0, Message: ""}, nil
+	return &sorm.LoginUserResponse{Code: result.Code, Message: result.Message}, nil
 }
 
 func (UserDataManagementServerImpl) LogoutUser(context.Context, *sorm.LogoutUserRequest) (*sorm.LogoutUserResponse, error) {
