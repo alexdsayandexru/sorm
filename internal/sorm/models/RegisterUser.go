@@ -11,8 +11,8 @@ type Additional struct {
 
 type AbInfo struct {
 	UserId       string       `json:"user_id"`
-	Msisdn       []string     `json:"msisdn"`
-	Email        []string     `json:"email"`
+	Msisdns      []string     `json:"msisdn"`
+	Emails       []string     `json:"email"`
 	DatetimeReg  string       `json:"datetime_reg"`
 	ServiceId    int32        `json:"service_id"`
 	Additional   []Additional `json:"additional"`
@@ -54,12 +54,30 @@ func (target *RegisterUser) GetRules() ValidationRules {
 		"user_id": func() (bool, error) {
 			return validator.Validate(target.AbInfo.UserId).Required().MaxLength(255).Regex("^[A-Za-z0-9_-]+$").GetResult()
 		},
-		/*"msisdns": func() (bool, error) {
-			return validator.Validate(target.Msisdns).RequiredIf(target.Emails == nil).MaxLength(16).Regex("^[0-9+]+$").GetResult()
+		"msisdns": func() (bool, error) {
+			ok, err := validator.Validate(target.AbInfo.Msisdns).RequiredIf(target.AbInfo.Emails == nil || len(target.AbInfo.Emails) == 0).GetResult()
+			if ok {
+				for _, m := range target.AbInfo.Msisdns {
+					ok, err := validator.Validate(m).MaxLength(16).Regex("^[0-9+]+$").GetResult()
+					if !ok {
+						return ok, err
+					}
+				}
+			}
+			return ok, err
 		},
 		"emails": func() (bool, error) {
-			return validator.Validate(target.Emails).RequiredIf(target.Msisdns == nil).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
-		},*/
+			ok, err := validator.Validate(target.AbInfo.Emails).RequiredIf(target.AbInfo.Msisdns == nil || len(target.AbInfo.Msisdns) == 0).GetResult()
+			if ok {
+				for _, m := range target.AbInfo.Emails {
+					ok, err := validator.Validate(m).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
+					if !ok {
+						return ok, err
+					}
+				}
+			}
+			return ok, err
+		},
 		"datetime_reg": func() (bool, error) {
 			return validator.Validate(target.AbInfo.DatetimeReg).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
@@ -85,7 +103,7 @@ func (target *RegisterUser) GetRules() ValidationRules {
 			return validator.Validate(target.EventData.Port).Maximum(99999).GetResult()
 		},
 		"user_agent": func() (bool, error) {
-			return validator.Validate(target.EventData.UserAgent).MaxLength(1023).Regex("^[A-Za-z -]+$").GetResult()
+			return validator.Validate(target.EventData.UserAgent).MaxLength(1023).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
 		},
 		"message": func() (bool, error) {
 			return validator.Validate(target.EventData.Message).Required().MaxLength(8000).GetResult()

@@ -5,24 +5,24 @@ import (
 	"github.com/alexdsayandexru/sorm/internal/sorm/models"
 )
 
-func MsisdnArrayToStringArray(msisdns []*sorm.Msisdn) []string {
-	result := []string{}
+func ToMsisdnArray(msisdns []*sorm.Msisdn) []string {
+	var result []string
 	for _, m := range msisdns {
 		result = append(result, m.Msisdn)
 	}
 	return result
 }
 
-func EmailArrayToStringArray(emails []*sorm.Email) []string {
-	result := []string{}
+func ToEmailArray(emails []*sorm.Email) []string {
+	var result []string
 	for _, m := range emails {
 		result = append(result, m.Email)
 	}
 	return result
 }
 
-func AddArrayToStringArray(adds []*sorm.Add) []models.Additional {
-	result := []models.Additional{}
+func ToAdditionalArray(adds []*sorm.Add) []models.Additional {
+	var result []models.Additional
 	for _, m := range adds {
 		result = append(result, models.Additional{
 			Title:   m.Title,
@@ -40,11 +40,11 @@ func NewRegisterUser(s *sorm.RegisterUserRequest) *models.RegisterUser {
 		UserType:      s.UserType,
 		AbInfo: models.AbInfo{
 			UserId:       s.UserId,
-			Msisdn:       MsisdnArrayToStringArray(s.Msisdns),
-			Email:        EmailArrayToStringArray(s.Emails),
+			Msisdns:      ToMsisdnArray(s.Msisdns),
+			Emails:       ToEmailArray(s.Emails),
 			DatetimeReg:  s.DatetimeReg,
 			ServiceId:    s.ServiceId,
-			Additional:   AddArrayToStringArray(s.Additional),
+			Additional:   ToAdditionalArray(s.Additional),
 			ContractDate: s.ContractDate,
 		},
 		EventData: models.RegisterUserEventData{

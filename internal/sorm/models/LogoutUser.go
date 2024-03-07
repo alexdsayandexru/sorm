@@ -1,10 +1,12 @@
 package models
 
+import "github.com/alexdsayandexru/sorm/internal/validator"
+
 type LogoutUserEvent struct {
-	ServiceId int    `json:"service_id"`
+	ServiceId int32  `json:"service_id"`
 	UserId    string `json:"user_id"`
 	Ip        string `json:"ip"`
-	Port      int    `json:"port"`
+	Port      int32  `json:"port"`
 	UserAgent string `json:"user_agent"`
 	Datetime  string `json:"datetime"`
 }
@@ -12,7 +14,40 @@ type LogoutUserEvent struct {
 type LogoutUser struct {
 	EventType     string          `json:"event_type"`
 	CorrelationId string          `json:"correlation_id"`
-	TelcoId       int             `json:"telco_id"`
-	UserType      int             `json:"user_type"`
+	TelcoId       int32           `json:"telco_id"`
+	UserType      int32           `json:"user_type"`
 	Event         LogoutUserEvent `json:"event"`
+}
+
+func (target *LogoutUser) GetRules() ValidationRules {
+	validationRules := map[string]func() (bool, error){
+		"correlation_id": func() (bool, error) {
+			return validator.Validate(target.CorrelationId).Required().Uiid().GetResult()
+		},
+		"telco_id": func() (bool, error) {
+			return validator.Validate(target.TelcoId).Required().Maximum(100).GetResult()
+		},
+		"user_type": func() (bool, error) {
+			return validator.Validate(target.UserType).Required().Maximum(100).GetResult()
+		},
+		"user_id": func() (bool, error) {
+			return validator.Validate(target.Event.UserId).Required().MaxLength(255).Regex("^[A-Za-z0-9_-]+$").GetResult()
+		},
+		"service_id": func() (bool, error) {
+			return validator.Validate(target.Event.ServiceId).Required().Maximum(100000000).GetResult()
+		},
+		"ip": func() (bool, error) {
+			return validator.Validate(target.Event.Ip).MaxLength(255).Regex("^[0-9.]+$").GetResult()
+		},
+		"port": func() (bool, error) {
+			return validator.Validate(target.Event.Port).Maximum(99999).GetResult()
+		},
+		"user_agent": func() (bool, error) {
+			return validator.Validate(target.Event.UserAgent).MaxLength(1023).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
+		},
+		"datetime": func() (bool, error) {
+			return validator.Validate(target.Event.Datetime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+		},
+	}
+	return validationRules
 }

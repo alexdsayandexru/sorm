@@ -22,5 +22,8 @@ func main() {
 
 	client := sorm.NewUserDataManagementClient(conn)
 	//RegisterUser(client)
-	LoginUser(client)
+	//LoginUser(client)
+	//LogoutUser(client)
+	//DeleteUserAccount(client)
+	UpdateUserData(client)
 }

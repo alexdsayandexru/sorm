@@ -43,7 +43,7 @@ func (v *Validator) Regex(expression string) *Validator {
 		return v
 	}
 	re := regexp.MustCompile(expression)
-	if !re.MatchString(value) {
+	if len(value) > 0 && !re.MatchString(value) {
 		v.error = errors.New(fmt.Sprintf(InvalidValue))
 	}
 	return v

@@ -32,6 +32,11 @@ func (v *Validator) Required() *Validator {
 	}
 	if v.target == nil {
 		v.error = errors.New(RequiredField)
+	} else {
+		str, ok := v.target.(string)
+		if ok && len(str) == 0 {
+			v.error = errors.New(RequiredField)
+		}
 	}
 	return v
 }
