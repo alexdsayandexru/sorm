@@ -28,5 +28,7 @@ func main() {
 	//UpdateUserData(client)
 	//DeleteUserAccountAdmin(client)
 	//UpdateUserDataAdmin(client)
-	DeleteAccount(client)
+	//DeleteAccount(client)
+	//UserAccountRecovery(client)
+	DirectoryData(client)
 }

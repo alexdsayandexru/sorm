@@ -22,16 +22,16 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserDataManagementClient interface {
-	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
-	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
-	LogoutUser(ctx context.Context, in *LogoutUserRequest, opts ...grpc.CallOption) (*LogoutUserResponse, error)
-	DeleteUserAccount(ctx context.Context, in *DeleteUserAccountRequest, opts ...grpc.CallOption) (*DeleteUserAccountResponse, error)
-	UpdateUserData(ctx context.Context, in *UpdateUserDataRequest, opts ...grpc.CallOption) (*UpdateUserDataResponse, error)
-	DeleteUserAccountAdmin(ctx context.Context, in *DeleteUserAccountAdminRequest, opts ...grpc.CallOption) (*DeleteUserAccountAdminResponse, error)
-	UpdateUserDataAdmin(ctx context.Context, in *UpdateUserDataAdminRequest, opts ...grpc.CallOption) (*UpdateUserDataAdminResponse, error)
-	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
-	UserAccountRecovery(ctx context.Context, in *UserAccountRecoveryRequest, opts ...grpc.CallOption) (*UserAccountRecoveryResponse, error)
-	DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DirectoryDataResponse, error)
+	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	LogoutUser(ctx context.Context, in *LogoutUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	DeleteUserAccount(ctx context.Context, in *DeleteUserAccountRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	UpdateUserData(ctx context.Context, in *UpdateUserDataRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	DeleteUserAccountAdmin(ctx context.Context, in *DeleteUserAccountAdminRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	UpdateUserDataAdmin(ctx context.Context, in *UpdateUserDataAdminRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	UserAccountRecovery(ctx context.Context, in *UserAccountRecoveryRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
+	DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DataManagementResponse, error)
 }
 
 type userDataManagementClient struct {
@@ -42,8 +42,8 @@ func NewUserDataManagementClient(cc grpc.ClientConnInterface) UserDataManagement
 	return &userDataManagementClient{cc}
 }
 
-func (c *userDataManagementClient) RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error) {
-	out := new(RegisterUserResponse)
+func (c *userDataManagementClient) RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/RegisterUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,8 +51,8 @@ func (c *userDataManagementClient) RegisterUser(ctx context.Context, in *Registe
 	return out, nil
 }
 
-func (c *userDataManagementClient) LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error) {
-	out := new(LoginUserResponse)
+func (c *userDataManagementClient) LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/LoginUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -60,8 +60,8 @@ func (c *userDataManagementClient) LoginUser(ctx context.Context, in *LoginUserR
 	return out, nil
 }
 
-func (c *userDataManagementClient) LogoutUser(ctx context.Context, in *LogoutUserRequest, opts ...grpc.CallOption) (*LogoutUserResponse, error) {
-	out := new(LogoutUserResponse)
+func (c *userDataManagementClient) LogoutUser(ctx context.Context, in *LogoutUserRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/LogoutUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -69,8 +69,8 @@ func (c *userDataManagementClient) LogoutUser(ctx context.Context, in *LogoutUse
 	return out, nil
 }
 
-func (c *userDataManagementClient) DeleteUserAccount(ctx context.Context, in *DeleteUserAccountRequest, opts ...grpc.CallOption) (*DeleteUserAccountResponse, error) {
-	out := new(DeleteUserAccountResponse)
+func (c *userDataManagementClient) DeleteUserAccount(ctx context.Context, in *DeleteUserAccountRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/DeleteUserAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -78,8 +78,8 @@ func (c *userDataManagementClient) DeleteUserAccount(ctx context.Context, in *De
 	return out, nil
 }
 
-func (c *userDataManagementClient) UpdateUserData(ctx context.Context, in *UpdateUserDataRequest, opts ...grpc.CallOption) (*UpdateUserDataResponse, error) {
-	out := new(UpdateUserDataResponse)
+func (c *userDataManagementClient) UpdateUserData(ctx context.Context, in *UpdateUserDataRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/UpdateUserData", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -87,8 +87,8 @@ func (c *userDataManagementClient) UpdateUserData(ctx context.Context, in *Updat
 	return out, nil
 }
 
-func (c *userDataManagementClient) DeleteUserAccountAdmin(ctx context.Context, in *DeleteUserAccountAdminRequest, opts ...grpc.CallOption) (*DeleteUserAccountAdminResponse, error) {
-	out := new(DeleteUserAccountAdminResponse)
+func (c *userDataManagementClient) DeleteUserAccountAdmin(ctx context.Context, in *DeleteUserAccountAdminRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/DeleteUserAccountAdmin", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -96,8 +96,8 @@ func (c *userDataManagementClient) DeleteUserAccountAdmin(ctx context.Context, i
 	return out, nil
 }
 
-func (c *userDataManagementClient) UpdateUserDataAdmin(ctx context.Context, in *UpdateUserDataAdminRequest, opts ...grpc.CallOption) (*UpdateUserDataAdminResponse, error) {
-	out := new(UpdateUserDataAdminResponse)
+func (c *userDataManagementClient) UpdateUserDataAdmin(ctx context.Context, in *UpdateUserDataAdminRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/UpdateUserDataAdmin", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -105,8 +105,8 @@ func (c *userDataManagementClient) UpdateUserDataAdmin(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *userDataManagementClient) DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error) {
-	out := new(DeleteAccountResponse)
+func (c *userDataManagementClient) DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/DeleteAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -114,8 +114,8 @@ func (c *userDataManagementClient) DeleteAccount(ctx context.Context, in *Delete
 	return out, nil
 }
 
-func (c *userDataManagementClient) UserAccountRecovery(ctx context.Context, in *UserAccountRecoveryRequest, opts ...grpc.CallOption) (*UserAccountRecoveryResponse, error) {
-	out := new(UserAccountRecoveryResponse)
+func (c *userDataManagementClient) UserAccountRecovery(ctx context.Context, in *UserAccountRecoveryRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/UserAccountRecovery", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -123,8 +123,8 @@ func (c *userDataManagementClient) UserAccountRecovery(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *userDataManagementClient) DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DirectoryDataResponse, error) {
-	out := new(DirectoryDataResponse)
+func (c *userDataManagementClient) DirectoryData(ctx context.Context, in *DirectoryDataRequest, opts ...grpc.CallOption) (*DataManagementResponse, error) {
+	out := new(DataManagementResponse)
 	err := c.cc.Invoke(ctx, "/sorm.UserDataManagement/DirectoryData", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -136,16 +136,16 @@ func (c *userDataManagementClient) DirectoryData(ctx context.Context, in *Direct
 // All implementations must embed UnimplementedUserDataManagementServer
 // for forward compatibility
 type UserDataManagementServer interface {
-	RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
-	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
-	LogoutUser(context.Context, *LogoutUserRequest) (*LogoutUserResponse, error)
-	DeleteUserAccount(context.Context, *DeleteUserAccountRequest) (*DeleteUserAccountResponse, error)
-	UpdateUserData(context.Context, *UpdateUserDataRequest) (*UpdateUserDataResponse, error)
-	DeleteUserAccountAdmin(context.Context, *DeleteUserAccountAdminRequest) (*DeleteUserAccountAdminResponse, error)
-	UpdateUserDataAdmin(context.Context, *UpdateUserDataAdminRequest) (*UpdateUserDataAdminResponse, error)
-	DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error)
-	UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*UserAccountRecoveryResponse, error)
-	DirectoryData(context.Context, *DirectoryDataRequest) (*DirectoryDataResponse, error)
+	RegisterUser(context.Context, *RegisterUserRequest) (*DataManagementResponse, error)
+	LoginUser(context.Context, *LoginUserRequest) (*DataManagementResponse, error)
+	LogoutUser(context.Context, *LogoutUserRequest) (*DataManagementResponse, error)
+	DeleteUserAccount(context.Context, *DeleteUserAccountRequest) (*DataManagementResponse, error)
+	UpdateUserData(context.Context, *UpdateUserDataRequest) (*DataManagementResponse, error)
+	DeleteUserAccountAdmin(context.Context, *DeleteUserAccountAdminRequest) (*DataManagementResponse, error)
+	UpdateUserDataAdmin(context.Context, *UpdateUserDataAdminRequest) (*DataManagementResponse, error)
+	DeleteAccount(context.Context, *DeleteAccountRequest) (*DataManagementResponse, error)
+	UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*DataManagementResponse, error)
+	DirectoryData(context.Context, *DirectoryDataRequest) (*DataManagementResponse, error)
 	mustEmbedUnimplementedUserDataManagementServer()
 }
 
@@ -153,34 +153,34 @@ type UserDataManagementServer interface {
 type UnimplementedUserDataManagementServer struct {
 }
 
-func (UnimplementedUserDataManagementServer) RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error) {
+func (UnimplementedUserDataManagementServer) RegisterUser(context.Context, *RegisterUserRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
 }
-func (UnimplementedUserDataManagementServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
+func (UnimplementedUserDataManagementServer) LoginUser(context.Context, *LoginUserRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
 }
-func (UnimplementedUserDataManagementServer) LogoutUser(context.Context, *LogoutUserRequest) (*LogoutUserResponse, error) {
+func (UnimplementedUserDataManagementServer) LogoutUser(context.Context, *LogoutUserRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LogoutUser not implemented")
 }
-func (UnimplementedUserDataManagementServer) DeleteUserAccount(context.Context, *DeleteUserAccountRequest) (*DeleteUserAccountResponse, error) {
+func (UnimplementedUserDataManagementServer) DeleteUserAccount(context.Context, *DeleteUserAccountRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserAccount not implemented")
 }
-func (UnimplementedUserDataManagementServer) UpdateUserData(context.Context, *UpdateUserDataRequest) (*UpdateUserDataResponse, error) {
+func (UnimplementedUserDataManagementServer) UpdateUserData(context.Context, *UpdateUserDataRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserData not implemented")
 }
-func (UnimplementedUserDataManagementServer) DeleteUserAccountAdmin(context.Context, *DeleteUserAccountAdminRequest) (*DeleteUserAccountAdminResponse, error) {
+func (UnimplementedUserDataManagementServer) DeleteUserAccountAdmin(context.Context, *DeleteUserAccountAdminRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserAccountAdmin not implemented")
 }
-func (UnimplementedUserDataManagementServer) UpdateUserDataAdmin(context.Context, *UpdateUserDataAdminRequest) (*UpdateUserDataAdminResponse, error) {
+func (UnimplementedUserDataManagementServer) UpdateUserDataAdmin(context.Context, *UpdateUserDataAdminRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserDataAdmin not implemented")
 }
-func (UnimplementedUserDataManagementServer) DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error) {
+func (UnimplementedUserDataManagementServer) DeleteAccount(context.Context, *DeleteAccountRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
 }
-func (UnimplementedUserDataManagementServer) UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*UserAccountRecoveryResponse, error) {
+func (UnimplementedUserDataManagementServer) UserAccountRecovery(context.Context, *UserAccountRecoveryRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserAccountRecovery not implemented")
 }
-func (UnimplementedUserDataManagementServer) DirectoryData(context.Context, *DirectoryDataRequest) (*DirectoryDataResponse, error) {
+func (UnimplementedUserDataManagementServer) DirectoryData(context.Context, *DirectoryDataRequest) (*DataManagementResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DirectoryData not implemented")
 }
 func (UnimplementedUserDataManagementServer) mustEmbedUnimplementedUserDataManagementServer() {}

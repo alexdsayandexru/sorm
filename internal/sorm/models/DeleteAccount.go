@@ -19,6 +19,7 @@ type DeleteAccountAbInfo struct {
 	Additional      []Additional `json:"additional"`
 	DatetimeUnreg   string       `json:"datetime_unreg"`
 	ContractDate    string       `json:"contract_date"`
+	ServiceUser     int32        `json:"service_user"`
 }
 
 type DeleteAccount struct {
@@ -110,9 +111,9 @@ func (target *DeleteAccount) GetRules() ValidationRules {
 		"datetime_unreg": func() (bool, error) {
 			return validator.Validate(target.AbInfo.DatetimeUnreg).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
-		/*"service_user": func() (bool, error) {
-			return validator.Validate(target.ServiceUser).Required().Equal(1).GetResult()
-		},*/
+		"service_user": func() (bool, error) {
+			return validator.Validate(target.AbInfo.ServiceUser).Required().Equal(1).GetResult()
+		},
 		"title-content": func() (bool, error) {
 			for _, m := range target.AbInfo.Additional {
 				ok, err := validator.Validate(m.Title).MaxLength(255).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()

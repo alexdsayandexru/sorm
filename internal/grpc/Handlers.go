@@ -34,115 +34,67 @@ func (s *UserDataManagementServerImpl) Run() error {
 	return err
 }
 
-func Handle(ctx context.Context, target models.IEntity) (bool, EventHandlerResult) {
+func Handle(ctx context.Context, target models.IEntity) (*sorm.DataManagementResponse, error) {
 	ok, result := NewEventHandler(
 		ctx,
 		target,
 		kafka.GetProducer("localhost", 9092, "idp.sorm.user-registration.0"),
 	).Handle()
-	return ok, result
+
+	if !ok {
+		return &sorm.DataManagementResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
+			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
+	}
+
+	return &sorm.DataManagementResponse{Code: result.Code, Message: result.Message}, nil
 }
 
-func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.RegisterUserResponse, error) {
+func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewRegisterUser(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.RegisterUserResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) LoginUser(ctx context.Context, request *sorm.LoginUserRequest) (*sorm.LoginUserResponse, error) {
+func (UserDataManagementServerImpl) LoginUser(ctx context.Context, request *sorm.LoginUserRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewLoginUser(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.LoginUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.LoginUserResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) LogoutUser(ctx context.Context, request *sorm.LogoutUserRequest) (*sorm.LogoutUserResponse, error) {
+func (UserDataManagementServerImpl) LogoutUser(ctx context.Context, request *sorm.LogoutUserRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewLogoutUser(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.LogoutUserResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.LogoutUserResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) DeleteUserAccount(ctx context.Context, request *sorm.DeleteUserAccountRequest) (*sorm.DeleteUserAccountResponse, error) {
+func (UserDataManagementServerImpl) DeleteUserAccount(ctx context.Context, request *sorm.DeleteUserAccountRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewDeleteUserAccount(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.DeleteUserAccountResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.DeleteUserAccountResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) UpdateUserData(ctx context.Context, request *sorm.UpdateUserDataRequest) (*sorm.UpdateUserDataResponse, error) {
+func (UserDataManagementServerImpl) UpdateUserData(ctx context.Context, request *sorm.UpdateUserDataRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewUpdateUserData(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.UpdateUserDataResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.UpdateUserDataResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) DeleteUserAccountAdmin(ctx context.Context, request *sorm.DeleteUserAccountAdminRequest) (*sorm.DeleteUserAccountAdminResponse, error) {
+func (UserDataManagementServerImpl) DeleteUserAccountAdmin(ctx context.Context, request *sorm.DeleteUserAccountAdminRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewDeleteUserAccountAdmin(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.DeleteUserAccountAdminResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.DeleteUserAccountAdminResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) UpdateUserDataAdmin(ctx context.Context, request *sorm.UpdateUserDataAdminRequest) (*sorm.UpdateUserDataAdminResponse, error) {
+func (UserDataManagementServerImpl) UpdateUserDataAdmin(ctx context.Context, request *sorm.UpdateUserDataAdminRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewUpdateUserDataAdmin(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.UpdateUserDataAdminResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.UpdateUserDataAdminResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) DeleteAccount(ctx context.Context, request *sorm.DeleteAccountRequest) (*sorm.DeleteAccountResponse, error) {
+func (UserDataManagementServerImpl) DeleteAccount(ctx context.Context, request *sorm.DeleteAccountRequest) (*sorm.DataManagementResponse, error) {
 	target := factory.NewDeleteAccount(request)
-	ok, result := Handle(ctx, target)
-
-	if !ok {
-		return &sorm.DeleteAccountResponse{Code: result.Code, Message: result.Message, Details: []*anypb.Any{{Value: []byte(result.Error.Error())}}},
-			status.Errorf(codes.Code(result.Code), result.Message, result.Error.Error())
-	}
-
-	return &sorm.DeleteAccountResponse{Code: result.Code, Message: result.Message}, nil
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) UserAccountRecovery(context.Context, *sorm.UserAccountRecoveryRequest) (*sorm.UserAccountRecoveryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserAccountRecovery not implemented")
+func (UserDataManagementServerImpl) UserAccountRecovery(ctx context.Context, request *sorm.UserAccountRecoveryRequest) (*sorm.DataManagementResponse, error) {
+	target := factory.NewUserAccountRecovery(request)
+	return Handle(ctx, target)
 }
 
-func (UserDataManagementServerImpl) DirectoryData(context.Context, *sorm.DirectoryDataRequest) (*sorm.DirectoryDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DirectoryData not implemented")
+func (UserDataManagementServerImpl) DirectoryData(ctx context.Context, request *sorm.DirectoryDataRequest) (*sorm.DataManagementResponse, error) {
+	target := factory.NewDirectoryData(request)
+	return Handle(ctx, target)
 }

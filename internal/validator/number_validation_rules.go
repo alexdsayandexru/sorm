@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (v *Validator) Maximum(max int32) *Validator {
+func (v *Validator) Maximum(value int32) *Validator {
 	if v.error != nil {
 		return v
 	}
@@ -13,8 +13,8 @@ func (v *Validator) Maximum(max int32) *Validator {
 	if ok == false {
 		return v
 	}
-	if target > max {
-		v.error = errors.New(fmt.Sprintf(MaxValue, max))
+	if target > value {
+		v.error = errors.New(fmt.Sprintf(MaxValue, value))
 	}
 	return v
 }

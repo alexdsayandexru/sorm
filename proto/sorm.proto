@@ -7,16 +7,16 @@ package sorm;
 option go_package = "github.com/alexdsayandexru/sorm/gen;sorm";
 
 service UserDataManagement {
-  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse);
-  rpc LoginUser (LoginUserRequest) returns (LoginUserResponse);
-  rpc LogoutUser (LogoutUserRequest) returns (LogoutUserResponse);
-  rpc DeleteUserAccount (DeleteUserAccountRequest) returns (DeleteUserAccountResponse);
-  rpc UpdateUserData (UpdateUserDataRequest) returns (UpdateUserDataResponse);
-  rpc DeleteUserAccountAdmin (DeleteUserAccountAdminRequest) returns (DeleteUserAccountAdminResponse);
-  rpc UpdateUserDataAdmin (UpdateUserDataAdminRequest) returns (UpdateUserDataAdminResponse);
-  rpc DeleteAccount (DeleteAccountRequest) returns (DeleteAccountResponse);
-  rpc UserAccountRecovery (UserAccountRecoveryRequest) returns (UserAccountRecoveryResponse);
-  rpc DirectoryData (DirectoryDataRequest) returns (DirectoryDataResponse);
+  rpc RegisterUser (RegisterUserRequest) returns (DataManagementResponse);
+  rpc LoginUser (LoginUserRequest) returns (DataManagementResponse);
+  rpc LogoutUser (LogoutUserRequest) returns (DataManagementResponse);
+  rpc DeleteUserAccount (DeleteUserAccountRequest) returns (DataManagementResponse);
+  rpc UpdateUserData (UpdateUserDataRequest) returns (DataManagementResponse);
+  rpc DeleteUserAccountAdmin (DeleteUserAccountAdminRequest) returns (DataManagementResponse);
+  rpc UpdateUserDataAdmin (UpdateUserDataAdminRequest) returns (DataManagementResponse);
+  rpc DeleteAccount (DeleteAccountRequest) returns (DataManagementResponse);
+  rpc UserAccountRecovery (UserAccountRecoveryRequest) returns (DataManagementResponse);
+  rpc DirectoryData (DirectoryDataRequest) returns (DataManagementResponse);
 }
 
 //**********************************************************************************************************************
@@ -37,7 +37,6 @@ message Im_id {
   string service_name = 1;
   string service_id = 2;
 }
-
 //**********************************************************************************************************************
 message RegisterUserRequest {
   string correlation_id = 1;     // Уникальный идентификатор события
@@ -59,13 +58,6 @@ message RegisterUserRequest {
   string email_login = 17;       // Email, по которому пользователь аутентифицирован
   string  message = 18;          // текст сообщения без разметки и иной служебной коммуникационной информации;
 }
-
-message RegisterUserResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке
-}
-
 //**********************************************************************************************************************
 message LoginUserRequest {
   string correlation_id = 1;     // Уникальный идентификатор события
@@ -81,13 +73,6 @@ message LoginUserRequest {
   string  msisdn_login = 11;     // номер телефона
   string  email_login = 12;      // email
 }
-
-message LoginUserResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-}
-
 //**********************************************************************************************************************
 message LogoutUserRequest {
   string correlation_id = 1;     // Уникальный идентификатор события
@@ -100,13 +85,6 @@ message LogoutUserRequest {
   string user_agent = 8;         // Прочая техническая информация User_agent
   string datetime = 9;           // Дата и время наступления события
 }
-
-message LogoutUserResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-}
-
 //**********************************************************************************************************************
 message DeleteUserAccountRequest {
   string correlation_id = 1;     // Уникальный идентификатор события
@@ -120,13 +98,6 @@ message DeleteUserAccountRequest {
   string datetime = 9;           // Дата и время наступления события
   string message = 10;         // текст сообщения без разметки и иной служебной коммуникационной информации
 }
-
-message DeleteUserAccountResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-}
-
 //**********************************************************************************************************************
 message UpdateUserDataRequest {
   string correlation_id = 1;     // Уникальный идентификатор события
@@ -154,13 +125,6 @@ message UpdateUserDataRequest {
   repeated Im_id im_ids = 23;    // Список УЗ пользователя во внешних сервисах
   string message = 24;           // текст сообщения без разметки и иной служебной коммуникационной информации
   }
-
-  message UpdateUserDataResponse {
-    int32 code = 1;                           // gRPC код ошибки
-    string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-    repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-  }
-
 //**********************************************************************************************************************
 message DeleteUserAccountAdminRequest {
   string correlation_id = 1;    // Уникальный идентификатор события
@@ -185,13 +149,6 @@ message DeleteUserAccountAdminRequest {
   repeated Im_id im_ids = 20;    // Список УЗ пользователя во внешних сервисах
   string datetime_unreg = 21;    // Дата и удаления пользователя
 }
-
-message DeleteUserAccountAdminResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-}
-
 //**********************************************************************************************************************
 message UpdateUserDataAdminRequest {
   string correlation_id = 1;      // Уникальный идентификатор события
@@ -215,14 +172,7 @@ message UpdateUserDataAdminRequest {
   string address = 19;           // Город
   repeated Im_id im_ids = 20;    // Список УЗ пользователя во внешних сервисах
   string message = 21;           // текст сообщения без разметки и иной служебной коммуникационной информации
-  }
-
-  message UpdateUserDataAdminResponse {
-    int32 code = 1;                           // gRPC код ошибки
-    string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-    repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-  }
-
+}
 //**********************************************************************************************************************
 message DeleteAccountRequest {
   string correlation_id = 1;      // Уникальный идентификатор события
@@ -245,13 +195,6 @@ message DeleteAccountRequest {
   repeated Im_id im_ids = 18;    // Список УЗ пользователя во внешних сервисах
   string datetime_unreg = 19;    // Дата время и удаления пользователя
 }
-
-message DeleteAccountResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
-}
-
 //**********************************************************************************************************************
 message UserAccountRecoveryRequest {
 string correlation_id = 1;     // Уникальный идентификатор события
@@ -265,14 +208,7 @@ string correlation_id = 1;     // Уникальный идентификато�
     string datetime = 9;           // Дата и время наступления события
     string msisdn_login = 10;          //  номер телефона
     string email_login = 11;           // email
-    }
-
-message UserAccountRecoveryResponse {
-  int32 code = 1;                           // gRPC код ошибки
-  string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
 }
-
 //**********************************************************************************************************************
 message Service {
   int32 service_id = 1;     // Уникальный идентификатор сервиса
@@ -286,9 +222,9 @@ message DirectoryDataRequest {
   string datetime = 2;            // Дата и время наступления события
   repeated Service services = 3;  // Список сервисов
 }
-
-message DirectoryDataResponse {
-  bool success = 1;                         // Успешность операции (true - false)
+//**********************************************************************************************************************
+message DataManagementResponse {
+  int32 code = 1;                           // gRPC код ошибки
   string message = 2;                       // Сообщение об ошибке или подтверждение успеха
-  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке.
+  repeated google.protobuf.Any details = 3; // Детальная информация об ошибке
 }
