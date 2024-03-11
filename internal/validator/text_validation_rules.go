@@ -12,8 +12,8 @@ func (v *Validator) MaxLength(max int) *Validator {
 	}
 
 	value, ok := v.target.(string)
-	if ok == false {
-		return v
+	if !ok {
+		panic("Unexpected target type")
 	}
 
 	if len(value) > 0 && len(value) > max {
@@ -28,8 +28,8 @@ func (v *Validator) Length(count int) *Validator {
 	}
 
 	value, ok := v.target.(string)
-	if ok == false {
-		return v
+	if !ok {
+		panic("Unexpected target type")
 	}
 
 	if len(value) > 0 && len(value) != count {
@@ -44,8 +44,8 @@ func (v *Validator) Regex(expression string) *Validator {
 	}
 
 	value, ok := v.target.(string)
-	if ok == false {
-		return v
+	if !ok {
+		panic("Unexpected target type")
 	}
 
 	if len(value) > 0 {

@@ -23,12 +23,11 @@ func NewDeleteAccount(s *sorm.DeleteAccountRequest) *models.DeleteAccount {
 			Address:         s.Address,
 			DatetimeReg:     s.DatetimeReg,
 			DatetimeUpdated: s.DatetimeUpdated,
-			ServiceId:       100000000,
+			ServiceId:       s.ServiceUser,
 			ImId:            ToImIdArray(s.ImIds),
 			Additional:      ToAdditionalArray(s.Additional),
 			DatetimeUnreg:   s.DatetimeUnreg,
 			ContractDate:    s.ContractDate,
-			ServiceUser:     s.ServiceUser,
 		},
 	}
 }

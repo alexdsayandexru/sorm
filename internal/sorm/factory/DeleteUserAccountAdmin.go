@@ -23,7 +23,7 @@ func NewDeleteUserAccountAdmin(s *sorm.DeleteUserAccountAdminRequest) *models.De
 			Address:         s.Address,
 			DatetimeReg:     s.DatetimeReg,
 			DatetimeUpdated: s.DatetimeUpdated,
-			ServiceId:       s.ServiceId,
+			ServiceId:       s.ServiceUser,
 			ImId:            ToImIdArray(s.ImIds),
 			Additional:      ToAdditionalArray(s.Additional),
 			DatetimeUnreg:   s.DatetimeUnreg,

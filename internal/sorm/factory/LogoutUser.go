@@ -7,7 +7,7 @@ import (
 
 func NewLogoutUser(s *sorm.LogoutUserRequest) *models.LogoutUser {
 	return &models.LogoutUser{
-		EventType:     "user_login",
+		EventType:     "user_logout",
 		CorrelationId: s.CorrelationId,
 		TelcoId:       s.TelcoId,
 		UserType:      s.UserType,

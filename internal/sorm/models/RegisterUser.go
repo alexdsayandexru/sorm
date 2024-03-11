@@ -52,10 +52,10 @@ func (target *RegisterUser) GetRules() ValidationRules {
 		"msisdns": func() (bool, error) {
 			ok, err := validator.Validate(target.AbInfo.Msisdns).RequiredIf(target.AbInfo.Emails == nil || len(target.AbInfo.Emails) == 0).GetResult()
 			if ok {
-				for _, m := range target.AbInfo.Msisdns {
+				for i, m := range target.AbInfo.Msisdns {
 					ok, err := validator.Validate(m).MaxLength(16).Regex("^[0-9+]+$").GetResult()
 					if !ok {
-						return ok, err
+						return false, NewError(i, "msisdn", err)
 					}
 				}
 			}
@@ -64,10 +64,10 @@ func (target *RegisterUser) GetRules() ValidationRules {
 		"emails": func() (bool, error) {
 			ok, err := validator.Validate(target.AbInfo.Emails).RequiredIf(target.AbInfo.Msisdns == nil || len(target.AbInfo.Msisdns) == 0).GetResult()
 			if ok {
-				for _, m := range target.AbInfo.Emails {
+				for i, m := range target.AbInfo.Emails {
 					ok, err := validator.Validate(m).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
 					if !ok {
-						return ok, err
+						return false, NewError(i, "email", err)
 					}
 				}
 			}
@@ -76,14 +76,14 @@ func (target *RegisterUser) GetRules() ValidationRules {
 		"datetime_reg": func() (bool, error) {
 			return validator.Validate(target.AbInfo.DatetimeReg).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
-		/*"service_user": func() (bool, error) {
-			return validator.Validate(target.ServiceUser).Required().Equal(1).GetResult()
-		},*/
+		"service_user": func() (bool, error) {
+			return validator.Validate(target.AbInfo.ServiceId).Required().Equal(1).GetResult()
+		},
 		"contract_date": func() (bool, error) {
 			return validator.Validate(target.AbInfo.ContractDate).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
 		"service_id": func() (bool, error) {
-			return validator.Validate(target.AbInfo.ServiceId).Required().Maximum(100000000).GetResult()
+			return validator.Validate(target.EventData.ServiceId).Required().Maximum(100000000).GetResult()
 		},
 		"msisdn_login": func() (bool, error) {
 			return validator.Validate(target.EventData.Msisdn).RequiredIf(len(target.EventData.Email) == 0).MaxLength(16).Regex("^[0-9+]+$").GetResult()

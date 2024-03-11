@@ -9,10 +9,12 @@ func (v *Validator) Maximum(value int32) *Validator {
 	if v.error != nil {
 		return v
 	}
+
 	target, ok := v.target.(int32)
-	if ok == false {
-		return v
+	if !ok {
+		panic("Unexpected target type")
 	}
+
 	if target > value {
 		v.error = errors.New(fmt.Sprintf(MaxValue, value))
 	}
@@ -23,11 +25,13 @@ func (v *Validator) Equal(value int32) *Validator {
 	if v.error != nil {
 		return v
 	}
+
 	target, ok := v.target.(int32)
-	if ok == false {
-		return v
+	if !ok {
+		panic("Unexpected target type")
 	}
-	if target != value {
+
+	if target > 0 && target != value {
 		v.error = errors.New(fmt.Sprintf(EqualValue, value))
 	}
 	return v

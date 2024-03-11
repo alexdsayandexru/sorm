@@ -2,6 +2,8 @@ package models
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 )
 
 type ValidationRules map[string]func() (bool, error)
@@ -44,4 +46,8 @@ func Validate(entity IEntity) (bool, ErrorInfo) {
 		}
 	}
 	return len(errorInfo.FieldErrors) == 0, errorInfo
+}
+
+func NewError(i int, field string, err error) error {
+	return errors.New(fmt.Sprintf("[%d].[%s].[%s]", i, field, err.Error()))
 }

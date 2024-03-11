@@ -7,7 +7,7 @@ import (
 
 func NewDeleteUserAccount(s *sorm.DeleteUserAccountRequest) *models.DeleteUserAccount {
 	return &models.DeleteUserAccount{
-		EventType:     "user_login",
+		EventType:     "delete_user_account",
 		CorrelationId: s.CorrelationId,
 		TelcoId:       s.TelcoId,
 		UserType:      s.UserType,

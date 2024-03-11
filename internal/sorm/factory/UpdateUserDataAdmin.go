@@ -23,7 +23,7 @@ func NewUpdateUserDataAdmin(s *sorm.UpdateUserDataAdminRequest) *models.UpdateUs
 			Address:         s.Address,
 			DatetimeReg:     s.DatetimeReg,
 			DatetimeUpdated: s.DatetimeUpdated,
-			ServiceId:       s.ServiceId,
+			ServiceId:       s.ServiceUser,
 			ImId:            ToImIdArray(s.ImIds),
 			Additional:      ToAdditionalArray(s.Additional),
 			ContractDate:    s.ContractDate,

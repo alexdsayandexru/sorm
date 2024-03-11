@@ -50,25 +50,25 @@ func (target *DeleteUserAccountAdmin) GetRules() ValidationRules {
 		"user_id": func() (bool, error) {
 			return validator.Validate(target.AbInfo.UserId).Required().MaxLength(255).Regex("^[A-Za-z0-9_-]+$").GetResult()
 		},
-		"msisdn": func() (bool, error) {
+		"msisdns": func() (bool, error) {
 			ok, err := validator.Validate(target.AbInfo.Msisdns).RequiredIf(target.AbInfo.Emails == nil || len(target.AbInfo.Emails) == 0).GetResult()
 			if ok {
-				for _, m := range target.AbInfo.Msisdns {
+				for i, m := range target.AbInfo.Msisdns {
 					ok, err := validator.Validate(m).MaxLength(16).Regex("^[0-9+]+$").GetResult()
 					if !ok {
-						return ok, err
+						return false, NewError(i, "msisdn", err)
 					}
 				}
 			}
 			return ok, err
 		},
-		"email": func() (bool, error) {
+		"emails": func() (bool, error) {
 			ok, err := validator.Validate(target.AbInfo.Emails).RequiredIf(target.AbInfo.Msisdns == nil || len(target.AbInfo.Msisdns) == 0).GetResult()
 			if ok {
-				for _, m := range target.AbInfo.Emails {
+				for i, m := range target.AbInfo.Emails {
 					ok, err := validator.Validate(m).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
 					if !ok {
-						return ok, err
+						return false, NewError(i, "email", err)
 					}
 				}
 			}
@@ -92,18 +92,19 @@ func (target *DeleteUserAccountAdmin) GetRules() ValidationRules {
 		"address": func() (bool, error) {
 			return validator.Validate(target.AbInfo.Address).MaxLength(255).GetResult()
 		},
-		"service_id-service_name": func() (bool, error) {
-			if target.AbInfo.ImId == nil || len(target.AbInfo.ImId) == 0 {
+		"im_id": func() (bool, error) {
+			if target.AbInfo.ImId == nil {
 				return true, nil
 			}
-			for _, m := range target.AbInfo.ImId {
+
+			for i, m := range target.AbInfo.ImId {
 				ok, err := validator.Validate(m.ServiceId).MaxLength(255).GetResult()
 				if !ok {
-					return ok, err
+					return false, NewError(i, "service_id", err)
 				}
 				ok, err = validator.Validate(m.ServiceName).MaxLength(255).GetResult()
 				if !ok {
-					return ok, err
+					return false, NewError(i, "service_name", err)
 				}
 			}
 			return true, nil
@@ -117,18 +118,22 @@ func (target *DeleteUserAccountAdmin) GetRules() ValidationRules {
 		"datetime_unreg": func() (bool, error) {
 			return validator.Validate(target.AbInfo.DatetimeUnreg).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
-		/*"service_user": func() (bool, error) {
-			return validator.Validate(target.ServiceUser).Required().Equal(1).GetResult()
-		},*/
-		"title-content": func() (bool, error) {
-			for _, m := range target.AbInfo.Additional {
+		"service_user": func() (bool, error) {
+			return validator.Validate(target.AbInfo.ServiceId).Required().Equal(1).GetResult()
+		},
+		"additional": func() (bool, error) {
+			if target.AbInfo.Additional == nil {
+				return true, nil
+			}
+
+			for i, m := range target.AbInfo.Additional {
 				ok, err := validator.Validate(m.Title).MaxLength(255).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
 				if !ok {
-					return false, err
+					return false, NewError(i, "title", err)
 				}
 				ok, err = validator.Validate(m.Content).MaxLength(255).GetResult()
 				if !ok {
-					return false, err
+					return false, NewError(i, "content", err)
 				}
 			}
 			return true, nil
@@ -137,7 +142,7 @@ func (target *DeleteUserAccountAdmin) GetRules() ValidationRules {
 			return validator.Validate(target.AbInfo.ContractDate).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
 		},
 		"service_id": func() (bool, error) {
-			return validator.Validate(target.AbInfo.ServiceId).Required().Maximum(100000000).GetResult()
+			return validator.Validate(target.EventData.ServiceId).Required().Maximum(100000000).GetResult()
 		},
 		"datetime": func() (bool, error) {
 			return validator.Validate(target.EventData.Datetime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()

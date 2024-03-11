@@ -16,7 +16,7 @@ func NewRegisterUser(s *sorm.RegisterUserRequest) *models.RegisterUser {
 			Msisdns:      ToMsisdnArray(s.Msisdns),
 			Emails:       ToEmailArray(s.Emails),
 			DatetimeReg:  s.DatetimeReg,
-			ServiceId:    s.ServiceId,
+			ServiceId:    s.ServiceUser,
 			Additional:   ToAdditionalArray(s.Additional),
 			ContractDate: s.ContractDate,
 		},
