@@ -1,9 +1,5 @@
 package models
 
-import (
-	"github.com/alexdsayandexru/sorm/internal/validator"
-)
-
 type Service struct {
 	ServiceId   int32  `json:"service_id"`
 	Description string `json:"description"`
@@ -21,31 +17,13 @@ type DirectoryData struct {
 func (target *DirectoryData) GetRules() ValidationRules {
 	validationRules := map[string]func() (bool, error){
 		"correlation_id": func() (bool, error) {
-			return validator.Validate(target.CorrelationId).Required().Uiid().GetResult()
+			return ValidateCorrelationId(target.CorrelationId)
 		},
 		"datetime": func() (bool, error) {
-			return validator.Validate(target.Datetime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.Datetime)
 		},
 		"oriServices": func() (bool, error) {
-			for i, s := range target.OriServices {
-				ok, err := validator.Validate(s.ServiceId).Required().Maximum(100000000).GetResult()
-				if !ok {
-					return false, NewError(i, "service_id", err)
-				}
-				ok, err = validator.Validate(s.Description).MaxLength(255).GetResult()
-				if !ok {
-					return false, NewError(i, "description", err)
-				}
-				ok, err = validator.Validate(s.BeginTime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
-				if !ok {
-					return false, NewError(i, "begin_time", err)
-				}
-				ok, err = validator.Validate(s.EndTime).Length(23).Regex("^[0-9 :.-]+$").GetResult()
-				if !ok {
-					return false, NewError(i, "end_time", err)
-				}
-			}
-			return true, nil
+			return ValidateOriServices(target.OriServices)
 		},
 	}
 	return validationRules

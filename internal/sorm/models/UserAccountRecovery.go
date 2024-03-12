@@ -1,7 +1,5 @@
 package models
 
-import "github.com/alexdsayandexru/sorm/internal/validator"
-
 type UserAccountRecoveryEventData struct {
 	Datetime  string `json:"datetime"`
 	ServiceId int32  `json:"service_id"`
@@ -24,37 +22,37 @@ type UserAccountRecovery struct {
 func (target *UserAccountRecovery) GetRules() ValidationRules {
 	validationRules := map[string]func() (bool, error){
 		"correlation_id": func() (bool, error) {
-			return validator.Validate(target.CorrelationId).Required().Uiid().GetResult()
+			return ValidateCorrelationId(target.CorrelationId)
 		},
 		"telco_id": func() (bool, error) {
-			return validator.Validate(target.TelcoId).Required().Maximum(100).GetResult()
+			return ValidateTelcoId(target.TelcoId)
 		},
 		"user_type": func() (bool, error) {
-			return validator.Validate(target.UserType).Required().Maximum(100).GetResult()
+			return ValidateUserType(target.UserType)
 		},
 		"user_id": func() (bool, error) {
-			return validator.Validate(target.EventData.UserId).Required().MaxLength(255).Regex("^[A-Za-z0-9_-]+$").GetResult()
+			return ValidateUserId(target.EventData.UserId)
 		},
 		"service_id": func() (bool, error) {
-			return validator.Validate(target.EventData.ServiceId).Required().Maximum(100000000).GetResult()
+			return ValidateServiceId(target.EventData.ServiceId)
 		},
 		"msisdn_login": func() (bool, error) {
-			return validator.Validate(target.EventData.Msisdn).RequiredIf(len(target.EventData.Email) == 0).MaxLength(16).Regex("^[0-9+]+$").GetResult()
+			return ValidateMsisdnLogin(target.EventData.Msisdn, target.EventData.Email)
 		},
 		"email_login": func() (bool, error) {
-			return validator.Validate(target.EventData.Email).RequiredIf(len(target.EventData.Msisdn) == 0).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
+			return ValidateEmailLogin(target.EventData.Email, target.EventData.Msisdn)
 		},
 		"ip": func() (bool, error) {
-			return validator.Validate(target.EventData.Ip).MaxLength(255).Regex("^[0-9.]+$").GetResult()
+			return ValidateIp(target.EventData.Ip)
 		},
 		"port": func() (bool, error) {
-			return validator.Validate(target.EventData.Port).Maximum(99999).GetResult()
+			return ValidatePort(target.EventData.Port)
 		},
 		"user_agent": func() (bool, error) {
-			return validator.Validate(target.EventData.UserAgent).MaxLength(1023).Regex("^[A-Za-z -]+$").GetResult()
+			return ValidateUserAgent(target.EventData.UserAgent)
 		},
 		"datetime": func() (bool, error) {
-			return validator.Validate(target.EventData.Datetime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.EventData.Datetime)
 		},
 	}
 	return validationRules

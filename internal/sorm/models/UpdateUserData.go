@@ -1,7 +1,5 @@
 package models
 
-import "github.com/alexdsayandexru/sorm/internal/validator"
-
 type UpdateUserDataAbInfo struct {
 	UserId          string       `json:"user_id"`
 	Nick            string       `json:"nick"`
@@ -42,122 +40,76 @@ type UpdateUserData struct {
 func (target *UpdateUserData) GetRules() ValidationRules {
 	validationRules := map[string]func() (bool, error){
 		"correlation_id": func() (bool, error) {
-			return validator.Validate(target.CorrelationId).Required().Uiid().GetResult()
+			return ValidateCorrelationId(target.CorrelationId)
 		},
 		"telco_id": func() (bool, error) {
-			return validator.Validate(target.TelcoId).Required().Maximum(100).GetResult()
+			return ValidateTelcoId(target.TelcoId)
 		},
 		"user_type": func() (bool, error) {
-			return validator.Validate(target.UserType).Required().Maximum(100).GetResult()
+			return ValidateUserType(target.UserType)
 		},
 		"user_id": func() (bool, error) {
-			return validator.Validate(target.AbInfo.UserId).Required().MaxLength(255).Regex("^[A-Za-z0-9_-]+$").GetResult()
+			return ValidateUserId(target.AbInfo.UserId)
 		},
 		"msisdns": func() (bool, error) {
-			ok, err := validator.Validate(target.AbInfo.Msisdns).RequiredIf(target.AbInfo.Emails == nil || len(target.AbInfo.Emails) == 0).GetResult()
-			if ok {
-				for i, m := range target.AbInfo.Msisdns {
-					ok, err := validator.Validate(m).MaxLength(16).Regex("^[0-9+]+$").GetResult()
-					if !ok {
-						return false, NewError(i, "msisdn", err)
-					}
-				}
-			}
-			return ok, err
+			return ValidateMsisdns(target.AbInfo.Msisdns, target.AbInfo.Emails)
 		},
 		"emails": func() (bool, error) {
-			ok, err := validator.Validate(target.AbInfo.Emails).RequiredIf(target.AbInfo.Msisdns == nil || len(target.AbInfo.Msisdns) == 0).GetResult()
-			if ok {
-				for i, m := range target.AbInfo.Emails {
-					ok, err := validator.Validate(m).MaxLength(100).Regex("^[A-Za-z0-9!#$%&‘*+/=?^_`{|}~@.-]+$").GetResult()
-					if !ok {
-						return false, NewError(i, "email", err)
-					}
-				}
-			}
-			return ok, err
+			return ValidateEmails(target.AbInfo.Emails, target.AbInfo.Msisdns)
 		},
 		"nick": func() (bool, error) {
-			return validator.Validate(target.AbInfo.Nick).MaxLength(150).GetResult()
+			return ValidateNick(target.AbInfo.Nick)
 		},
 		"birth_date": func() (bool, error) {
-			return validator.Validate(target.AbInfo.BirthDate).Length(10).Regex("^[0-9-]+$").GetResult()
+			return ValidateBirthDate(target.AbInfo.BirthDate)
 		},
 		"name": func() (bool, error) {
-			return validator.Validate(target.AbInfo.Name).MaxLength(30).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
+			return ValidateNameFamilyInitial(target.AbInfo.Name)
 		},
 		"family": func() (bool, error) {
-			return validator.Validate(target.AbInfo.Family).MaxLength(30).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
+			return ValidateNameFamilyInitial(target.AbInfo.Family)
 		},
 		"initial": func() (bool, error) {
-			return validator.Validate(target.AbInfo.Initial).MaxLength(30).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
+			return ValidateNameFamilyInitial(target.AbInfo.Initial)
 		},
 		"address": func() (bool, error) {
-			return validator.Validate(target.AbInfo.Address).MaxLength(255).GetResult()
+			return ValidateAddress(target.AbInfo.Address)
 		},
 		"im_id": func() (bool, error) {
-			if target.AbInfo.ImId == nil {
-				return true, nil
-			}
-
-			for i, m := range target.AbInfo.ImId {
-				ok, err := validator.Validate(m.ServiceId).MaxLength(255).GetResult()
-				if !ok {
-					return false, NewError(i, "service_id", err)
-				}
-				ok, err = validator.Validate(m.ServiceName).MaxLength(255).GetResult()
-				if !ok {
-					return false, NewError(i, "service_name", err)
-				}
-			}
-			return true, nil
+			return ValidateImId(target.AbInfo.ImId)
 		},
 		"datetime_reg": func() (bool, error) {
-			return validator.Validate(target.AbInfo.DatetimeReg).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.AbInfo.DatetimeReg)
 		},
 		"datetime_updated": func() (bool, error) {
-			return validator.Validate(target.AbInfo.DatetimeUpdated).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.AbInfo.DatetimeUpdated)
 		},
 		"service_user": func() (bool, error) {
-			return validator.Validate(target.AbInfo.ServiceId).Required().Equal(1).GetResult()
+			return ValidateServiceUser(target.AbInfo.ServiceId)
 		},
 		"additional": func() (bool, error) {
-			if target.AbInfo.Additional == nil {
-				return true, nil
-			}
-
-			for i, m := range target.AbInfo.Additional {
-				ok, err := validator.Validate(m.Title).MaxLength(255).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
-				if !ok {
-					return false, NewError(i, "title", err)
-				}
-				ok, err = validator.Validate(m.Content).MaxLength(255).GetResult()
-				if !ok {
-					return false, NewError(i, "content", err)
-				}
-			}
-			return true, nil
+			return ValidateAdditional(target.AbInfo.Additional)
 		},
 		"contract_date": func() (bool, error) {
-			return validator.Validate(target.AbInfo.ContractDate).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.AbInfo.ContractDate)
 		},
 		"service_id": func() (bool, error) {
-			return validator.Validate(target.EventData.ServiceId).Required().Maximum(100000000).GetResult()
+			return ValidateServiceId(target.EventData.ServiceId)
 		},
 		"ip": func() (bool, error) {
-			return validator.Validate(target.EventData.Ip).MaxLength(255).Regex("^[0-9.]+$").GetResult()
+			return ValidateIp(target.EventData.Ip)
 		},
 		"port": func() (bool, error) {
-			return validator.Validate(target.EventData.Port).Maximum(99999).GetResult()
+			return ValidatePort(target.EventData.Port)
 		},
 		"user_agent": func() (bool, error) {
-			return validator.Validate(target.EventData.UserAgent).MaxLength(1023).Regex("^[A-Za-zА-Яа-я -]+$").GetResult()
+			return ValidateUserAgent(target.EventData.UserAgent)
 		},
 		"message": func() (bool, error) {
-			return validator.Validate(target.EventData.Message).Required().MaxLength(8000).GetResult()
+			return ValidateMessage(target.EventData.Message)
 		},
 		"datetime": func() (bool, error) {
-			return validator.Validate(target.EventData.Datetime).Required().Length(23).Regex("^[0-9 :.-]+$").GetResult()
+			return ValidateRequiredDatetime(target.EventData.Datetime)
 		},
 	}
 	return validationRules
