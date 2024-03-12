@@ -21,13 +21,13 @@ type EventHandlerResult struct {
 }
 
 type EventHandler struct {
-	ctx       context.Context
+	ctx       *context.Context
 	target    models.IEntity
 	validator models.IValidator
 	producer  kafka.IProducer
 }
 
-func NewEventHandler(ctx context.Context, target models.IEntity, validator models.IValidator, producer kafka.IProducer) *EventHandler {
+func NewEventHandler(ctx *context.Context, target models.IEntity, validator models.IValidator, producer kafka.IProducer) *EventHandler {
 	return &EventHandler{
 		ctx:       ctx,
 		target:    target,

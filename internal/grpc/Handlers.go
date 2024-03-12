@@ -36,7 +36,7 @@ func (s *UserDataManagementServerImpl) Run() error {
 
 func Handle(ctx context.Context, target models.IEntity) (*sorm.DataManagementResponse, error) {
 	ok, result := NewEventHandler(
-		ctx,
+		&ctx,
 		target,
 		models.GetValidator(),
 		kafka.GetProducer("localhost", 9092, "idp.sorm.user-registration.0"),
