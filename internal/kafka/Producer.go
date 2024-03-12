@@ -11,15 +11,15 @@ type IProducer interface {
 	Send(data []byte) (bool, error)
 }
 
-type Producer struct {
+type ProducerImpl struct {
 	host  string
 	port  int
 	topic string
 	time  time.Time
 }
 
-func GetProducer(host string, port int, topic string) *Producer {
-	return &Producer{
+func GetProducer(host string, port int, topic string) *ProducerImpl {
+	return &ProducerImpl{
 		host:  host,
 		port:  port,
 		topic: topic,
@@ -27,7 +27,7 @@ func GetProducer(host string, port int, topic string) *Producer {
 	}
 }
 
-func (p *Producer) Send(data []byte) (bool, error) {
+func (p *ProducerImpl) Send(data []byte) (bool, error) {
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": fmt.Sprintf("%s:%d", p.host, p.port)})
 	if err != nil {
 		return false, err

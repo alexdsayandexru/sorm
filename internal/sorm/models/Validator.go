@@ -33,7 +33,18 @@ func (e *ErrorInfo) ToJson() string {
 	return string(e.ToBytes())
 }
 
-func Validate(entity IEntity) (bool, ErrorInfo) {
+type IValidator interface {
+	Validate(entity IEntity) (bool, ErrorInfo)
+}
+
+func GetValidator() *ValidatorImpl {
+	return &ValidatorImpl{}
+}
+
+type ValidatorImpl struct {
+}
+
+func (v *ValidatorImpl) Validate(entity IEntity) (bool, ErrorInfo) {
 	errorInfo := ErrorInfo{
 		ErrorsCode:        ErrorsCode,
 		ErrorsDescription: ErrorsDescription,

@@ -38,6 +38,7 @@ func Handle(ctx context.Context, target models.IEntity) (*sorm.DataManagementRes
 	ok, result := NewEventHandler(
 		ctx,
 		target,
+		models.GetValidator(),
 		kafka.GetProducer("localhost", 9092, "idp.sorm.user-registration.0"),
 	).Handle()
 
