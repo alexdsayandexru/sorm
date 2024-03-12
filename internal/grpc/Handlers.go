@@ -51,51 +51,41 @@ func Handle(ctx context.Context, target models.IEntity) (*sorm.DataManagementRes
 }
 
 func (UserDataManagementServerImpl) RegisterUser(ctx context.Context, request *sorm.RegisterUserRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewRegisterUser(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewRegisterUser(request))
 }
 
 func (UserDataManagementServerImpl) LoginUser(ctx context.Context, request *sorm.LoginUserRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewLoginUser(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewLoginUser(request))
 }
 
 func (UserDataManagementServerImpl) LogoutUser(ctx context.Context, request *sorm.LogoutUserRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewLogoutUser(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewLogoutUser(request))
 }
 
 func (UserDataManagementServerImpl) DeleteUserAccount(ctx context.Context, request *sorm.DeleteUserAccountRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewDeleteUserAccount(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewDeleteUserAccount(request))
 }
 
 func (UserDataManagementServerImpl) UpdateUserData(ctx context.Context, request *sorm.UpdateUserDataRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewUpdateUserData(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewUpdateUserData(request))
 }
 
 func (UserDataManagementServerImpl) DeleteUserAccountAdmin(ctx context.Context, request *sorm.DeleteUserAccountAdminRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewDeleteUserAccountAdmin(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewDeleteUserAccountAdmin(request))
 }
 
 func (UserDataManagementServerImpl) UpdateUserDataAdmin(ctx context.Context, request *sorm.UpdateUserDataAdminRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewUpdateUserDataAdmin(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewUpdateUserDataAdmin(request))
 }
 
 func (UserDataManagementServerImpl) DeleteAccount(ctx context.Context, request *sorm.DeleteAccountRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewDeleteAccount(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewDeleteAccount(request))
 }
 
 func (UserDataManagementServerImpl) UserAccountRecovery(ctx context.Context, request *sorm.UserAccountRecoveryRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewUserAccountRecovery(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewUserAccountRecovery(request))
 }
 
 func (UserDataManagementServerImpl) DirectoryData(ctx context.Context, request *sorm.DirectoryDataRequest) (*sorm.DataManagementResponse, error) {
-	target := factory.NewDirectoryData(request)
-	return Handle(ctx, target)
+	return Handle(ctx, factory.NewDirectoryData(request))
 }
